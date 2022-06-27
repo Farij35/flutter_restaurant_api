@@ -25,11 +25,7 @@ class RestaurantCard extends StatelessWidget {
           restaurant.name,
         ),
         subtitle: Text(restaurant.city),
-        onTap: () => Navigator.pushNamed(
-          context,
-          RestaurantDetail.routeName,
-          arguments: restaurant,
-        ),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>RestaurantDetail(id: restaurant.id,))),
       ),
     );
   }

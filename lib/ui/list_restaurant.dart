@@ -6,7 +6,6 @@ import 'package:flutter_restaurant_api/widgets/restaurant_card.dart';
 import '../widgets/restaurant_widget.dart';
 
 class RestaurantList extends StatefulWidget {
-  static const routeName = '/restaurant_list';
 
   @override
   _RestaurantListState createState() => _RestaurantListState();

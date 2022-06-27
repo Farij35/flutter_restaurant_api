@@ -9,6 +9,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -23,13 +24,7 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: restoTextTheme,
       ),
-      initialRoute: RestaurantList.routeName,
-      routes: {
-        RestaurantList.routeName: (context) => RestaurantList(),
-        RestaurantDetail.routeName: (context) => RestaurantDetail(
-          restaurant: ModalRoute.of(context)?.settings.arguments as Restaurant,
-        ),
-      },
+      home: RestaurantList(),
     );
   }
 }
