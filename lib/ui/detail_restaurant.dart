@@ -12,26 +12,28 @@ class RestaurantDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<DetailProvider>(
-      create: (_) => DetailProvider(apiService: ApiService(), id: id),
-      child: Consumer<DetailProvider>(
-        builder: (context, state, _){
-          if(state.state == ResultState.loading){
-            return const Center(
-              child: CircularProgressIndicator()
-            );
-          } else if (state.state == ResultState.hasData){
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(state.result.restaurant.name),
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    Navigator.pop(context,true);
-                  },
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context,true);
+          },
+        ),
+      ),
+      body: ChangeNotifierProvider<DetailProvider>(
+        create: (_) => DetailProvider(apiService: ApiService(), id: id),
+        child: Consumer<DetailProvider>(
+          builder: (context, state, _){
+            if(state.state == ResultState.loading){
+              return const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
                 ),
-              ),
-              body: SingleChildScrollView(
+              );
+            } else if (state.state == ResultState.hasData){
+              return SingleChildScrollView(
                 child: Column(
                   children: [
                     Image.network('https://restaurant-api.dicoding.dev/images/large/${state.result.restaurant.pictureId}'),
@@ -49,10 +51,37 @@ class RestaurantDetail extends StatelessWidget {
                             ),
                           ),
                           const Divider(color: Colors.grey),
-                          Text('Location: ${state.result.restaurant.city}'),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                              ),
+                              const SizedBox(width: 5),
+                              Text('${state.result.restaurant.address}, ${state.result.restaurant.city}'),
+                            ],
+                          ),
                           const SizedBox(height: 10),
-                          Text('Rate: ${state.result.restaurant.rating}'),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Colors.yellow,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(state.result.restaurant.rating.toString()),
+                            ],
+                          ),
                           const Divider(color: Colors.grey),
+                          const Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              'Description',
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
                           Text(
                             state.result.restaurant.description,
                             style: const TextStyle(
@@ -60,7 +89,16 @@ class RestaurantDetail extends StatelessWidget {
                             ),
                           ),
                           const Divider(color: Colors.grey),
-                          const Text('Foods Menu'),
+                          const Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              'Foods Menu',
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
                           Column(
                             children: state.result.restaurant.menus.foods.map((food) =>
                                 Column(
@@ -94,7 +132,16 @@ class RestaurantDetail extends StatelessWidget {
                                 )).toList(),
                           ),
                           const Divider(color: Colors.grey),
-                          const Text('Drinks Menu'),
+                          const Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              'Drinks Menu',
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
                           Column(
                             children: state.result.restaurant.menus.drinks.map((drink) =>
                                 Column(
@@ -128,56 +175,86 @@ class RestaurantDetail extends StatelessWidget {
                                 )
                             ).toList(),
                           ),
+                          const Divider(color: Colors.grey),
+                          const Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              'Review',
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: state.result.restaurant.customerReviews.map((review) =>
+                              Card(
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                  leading: const Icon(Icons.supervised_user_circle, size: 50),
+                                  title: Row(
+                                    children: [
+                                      Text(review.name),
+                                      const Spacer(),
+                                      Text(review.date, style: const TextStyle(fontSize: 10, color: Colors.grey),)
+                                    ],
+                                  ),
+                                  subtitle: Text(review.review),
+                                ),
+                              ),
+                            ).toList(),
+                          ),
+                          const Divider(color: Colors.grey),
                         ],
                       ),
+                    ),
+                  ],
+                ),
+              );
+            } else if (state.state == ResultState.noData) {
+              return Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(state.message),
                     )
                   ],
                 ),
-              ),
-            );
-          } else if (state.state == ResultState.noData) {
-            return Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Text(state.message),
-                  )
-                ],
-              ),
-            );
-          } else if (state.state == ResultState.noConnection) {
-            return Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Text(state.message),
-                  )
-                ],
-              ),
-            );
-          } else if (state.state == ResultState.error) {
-            return Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Text(state.message),
-                  )
-                ],
-              ),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+              );
+            } else if (state.state == ResultState.noConnection) {
+              return Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(state.message),
+                    )
+                  ],
+                ),
+              );
+            } else if (state.state == ResultState.error) {
+              return Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(state.message),
+                    )
+                  ],
+                ),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
     );
   }

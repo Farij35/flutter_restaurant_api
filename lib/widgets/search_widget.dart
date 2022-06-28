@@ -40,7 +40,7 @@ class RestaurantSearchCard extends StatelessWidget {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 8, left: 8, bottom: 5),
+                  padding: const EdgeInsets.only(right: 8, left: 8, bottom: 5, top: 8),
                   child: Text(
                     restaurant.name,
                     style: const TextStyle(

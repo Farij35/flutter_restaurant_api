@@ -14,6 +14,7 @@ class RestaurantList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text('Restaurant'),
         actions: [
           IconButton(
@@ -27,7 +28,9 @@ class RestaurantList extends StatelessWidget {
         builder: (context, state, _){
         if (state.state == ResultState.loading){
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+            ),
           );
         } else if (state.state == ResultState.hasData){
           return StaggeredGridView.countBuilder(
@@ -87,93 +90,3 @@ class RestaurantList extends StatelessWidget {
     );
   }
 }
-
-
-// class RestaurantList extends StatefulWidget {
-//   const RestaurantList({Key? key}) : super(key: key);
-//
-//   @override
-//   _RestaurantListState createState() => _RestaurantListState();
-// }
-//
-// class _RestaurantListState extends State<RestaurantList> {
-//   late Future<RestaurantListJson> _restaurant;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _restaurant = ApiService().restaurantListGet();
-//   }
-//
-//   Widget _buildList(BuildContext context) {
-//     return FutureBuilder(
-//       future: _restaurant,
-//       builder: (context, AsyncSnapshot<RestaurantListJson> snapshot) {
-//         var state = snapshot.connectionState;
-//         if (state != ConnectionState.done) {
-//           return const Center(child: CircularProgressIndicator());
-//         } else {
-//           if(snapshot.hasData) {
-//             return StaggeredGridView.countBuilder(
-//               itemCount: snapshot.data?.restaurants.length,
-//               staggeredTileBuilder: (index) => const StaggeredTile.fit(2),
-//               crossAxisCount: 4,
-//               mainAxisSpacing: 4,
-//               crossAxisSpacing: 4,
-//               itemBuilder: (context, index) {
-//                 var restaurant = snapshot.data?.restaurants[index];
-//                 return RestaurantCard(restaurant: restaurant!);
-//               },
-//             );
-//             // return ListView.builder(
-//             //   shrinkWrap: true,
-//             //   itemCount: snapshot.data?.restaurants.length,
-//             //   itemBuilder: (context, index) {
-//             //     var restaurant = snapshot.data?.restaurants[index];
-//             //     return RestaurantCard(restaurant: restaurant!);
-//             //   },
-//             // );
-//           } else if (snapshot.hasError) {
-//             return Center(child: Text(snapshot.error.toString()));
-//           } else {
-//             return const Text('');
-//           }
-//         }
-//       },
-//     );
-//   }
-//
-//   Widget _buildAndroid(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Restaurant'),
-//         actions: [
-//           IconButton(
-//             onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchRestaurant())),
-//             icon: const Icon(Icons.search),
-//             color: Colors.black,
-//           ),
-//         ],
-//       ),
-//       body: _buildList(context),
-//     );
-//   }
-//
-//   Widget _buildIos(BuildContext context) {
-//     return CupertinoPageScaffold(
-//       navigationBar: const CupertinoNavigationBar(
-//         middle: Text('Restaurant'),
-//       ),
-//       child: _buildList(context),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return RestaurantWidget(
-//       androidBuilder: _buildAndroid,
-//       iosBuilder: _buildIos,
-//     );
-//   }
-//
-// }
