@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_restaurant_api/data/model/restaurants.dart';
+import 'package:flutter_restaurant_api/data/model/restaurant_search.dart';
 import 'package:flutter_restaurant_api/ui/detail_restaurant.dart';
 
-class RestaurantCard extends StatelessWidget {
+class RestaurantSearchCard extends StatelessWidget {
   final Restaurants restaurant;
 
-  const RestaurantCard({
+  const RestaurantSearchCard({
     Key? key,
     required this.restaurant
   }) : super(key: key);
