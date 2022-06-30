@@ -20,7 +20,7 @@ class _SearchRestaurantState extends State<SearchRestaurant> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pencarian'),
+        title: const Text('Search'),
         backgroundColor: Colors.white,
       ),
       body: SafeArea(
@@ -43,17 +43,24 @@ class _SearchRestaurantState extends State<SearchRestaurant> {
                         });
                   } else if (state.state == ResultState.noData) {
                     return Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          children: const [
-                            Icon(Icons.search_off, color: Colors.grey, size: 64),
-                            SizedBox(height: 24),
-                            Text('No restaurant found. Please recheck your keyword',
-                                style: TextStyle(color: Colors.grey))
-                          ],
-                        ));
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: const [
+                          Icon(
+                            Icons.search_off,
+                            color: Colors.grey,
+                            size: 60),
+                          SizedBox(height: 24),
+                          Text('Your search was not found.',
+                            style: TextStyle(
+                              color: Colors.grey
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   } else if (state.state == ResultState.noData) {
                     return Center(
                       child: Column(

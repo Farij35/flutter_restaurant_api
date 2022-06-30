@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_restaurant_api/data/api/api_service.dart';
 import 'package:flutter_restaurant_api/provider/resto_list_provider.dart';
@@ -6,8 +7,9 @@ import 'package:flutter_restaurant_api/common/styles.dart';
 import 'package:flutter_restaurant_api/ui/list_restaurant.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

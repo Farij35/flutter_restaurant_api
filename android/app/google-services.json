@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "817097065116",
+    "project_id": "restaurant-dicoding",
+    "storage_bucket": "restaurant-dicoding.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817097065116:android:f1ff5f5af474a7bf38a359",
+        "android_client_info": {
+          "package_name": "com.api.restaurant.flutter_restaurant_api"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817097065116-4vn14r0me7hkp4h5n5okl0qgsjm2anjk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBieJRSA83hZVdtiBreQuKW_yBWzUdG5sA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817097065116-4vn14r0me7hkp4h5n5okl0qgsjm2anjk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
