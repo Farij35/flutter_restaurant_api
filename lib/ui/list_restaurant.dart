@@ -1,4 +1,5 @@
 import 'package:flutter_restaurant_api/provider/resto_list_provider.dart';
+import 'package:flutter_restaurant_api/ui/favorite_restaurant.dart';
 import 'package:flutter_restaurant_api/ui/search.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,11 @@ class RestaurantList extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text('Restaurant'),
         actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const FavoriteRestaurant())),
+            icon: const Icon(Icons.favorite),
+            color: Colors.black,
+          ),
           IconButton(
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const SearchRestaurant())),
             icon: const Icon(Icons.search),

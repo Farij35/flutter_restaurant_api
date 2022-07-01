@@ -5,7 +5,10 @@ import 'package:flutter_restaurant_api/provider/resto_list_provider.dart';
 import 'package:flutter_restaurant_api/provider/search_provider.dart';
 import 'package:flutter_restaurant_api/common/styles.dart';
 import 'package:flutter_restaurant_api/ui/list_restaurant.dart';
+import 'package:flutter_restaurant_api/widgets/restaurant_card.dart';
+import 'package:flutter_restaurant_api/widgets/restaurant_favorite.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,9 +16,26 @@ Future main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
 
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    loadFavorite();
+    super.initState();
+  }
+  loadFavorite() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isPressed = prefs.getBool("isPressed")!;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
