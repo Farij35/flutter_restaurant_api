@@ -1,73 +1,36 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter_restaurant_api/data/model/restaurant_search.dart';
-import 'package:flutter_restaurant_api/data/model/restaurants_detail.dart';
+import 'package:flutter_restaurant_api/common/url.dart';
+import 'package:flutter_restaurant_api/data/model/restaurant.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_restaurant_api/data/model/restaurants.dart';
 
 class ApiService {
-
-  Future<RestaurantListJson> restaurantListGet() async {
-    final response = await http.get(
-      Uri.parse('https://restaurant-api.dicoding.dev/list'),
-    );
+  Future<RestaurantList> getRestaurants() async {
+    final response = await http.get(Uri.parse(Url.baseUrl + "list"));
     if (response.statusCode == 200) {
-      return RestaurantListJson.fromJson(json.decode(response.body));
+      return RestaurantList.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load Restaurant List');
+      throw Exception('Failed to load restaurants list');
     }
   }
 
-  Future<RestaurantDetailJson> restaurantDetailGet(String id) async {
-    try{
-      final response = await http.get(
-        Uri.parse('https://restaurant-api.dicoding.dev/detail/$id'),
-      );
-      if (response.statusCode == 200) {
-        return RestaurantDetailJson.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to load Restaurant Detail');
-      }
-    } on SocketException {
-      throw Exception('No Internet Connection');
-    } catch (e) {
-      throw Exception(e);
+  Future<RestaurantDetail> getRestaurantDetail(String id) async {
+    final response =
+        await http.get(Uri.parse(Url.baseUrl + "detail/" + id));
+    if (response.statusCode == 200) {
+      return RestaurantDetail.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load restaurant detail');
     }
   }
 
-  Future<RestaurantSearch> restaurantSearch(String query) async {
-    String querySpace = query.replaceAll((' '), '%20');
-    try{
-      final response = await http.get(
-        Uri.parse('https://restaurant-api.dicoding.dev/search?q=$querySpace'),
-      );
-      if (response.statusCode == 200) {
-        return RestaurantSearch.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to load Restaurant Search');
-      }
-    } on SocketException {
-      throw Exception('No Internet Connection');
-    } catch (e) {
-      throw Exception(e);
+  Future<RestaurantSearch> searchRestaurant(String query) async {
+    String tempQuery = query.replaceAll(' ', '%20');
+    final response =
+        await http.get(Uri.parse(Url.baseUrl + "search?q=" + tempQuery));
+    if (response.statusCode == 200) {
+      return RestaurantSearch.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load search result');
     }
   }
-
-  Future<RestaurantListJson> restaurantGet() async {
-    try{
-      final response = await http.get(
-        Uri.parse('https://restaurant-api.dicoding.dev/list'),
-      );
-      if (response.statusCode == 200) {
-        return RestaurantListJson.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to load Restaurant List');
-      }
-    } on SocketException {
-      throw Exception('No Internet Connection');
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
 }

@@ -1,118 +1,106 @@
-import 'package:flutter_restaurant_api/provider/search_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_restaurant_api/widgets/search_widget.dart';
+import 'package:flutter_restaurant_api/provider/search_provider.dart';
+import 'package:flutter_restaurant_api/widgets/restaurant_card.dart';
 import 'package:provider/provider.dart';
 
-class SearchRestaurant extends StatefulWidget {
-  const SearchRestaurant({
-    Key? key
-  }) : super(key: key);
+
+class SearchScreen extends StatefulWidget {
+  static const routeName = '/search';
+
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
-  _SearchRestaurantState createState() => _SearchRestaurantState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchRestaurantState extends State<SearchRestaurant> {
-  String searchQuery = "";
+class _SearchScreenState extends State<SearchScreen> {
+  String searchQuery = '';
   final TextEditingController _search = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search'),
-        backgroundColor: Colors.white,
-      ),
+        appBar: AppBar(
+          title: const Text("Search"),
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context,true);
+            },
+          ),
+        ),
       body: SafeArea(
         child: Column(
           children: [
             searchField(),
             const SizedBox(height: 8),
             Expanded(
-              child: Consumer<SearchProvider>(
+              child: Consumer<SearchRestaurantProvider>(
                 builder: (context, state, _) {
-                  if (state.state == ResultState.loading) {
+                  if (state.state == ResultState.Loading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (state.state == ResultState.hasData) {
+                  } else if (state.state == ResultState.HasData) {
                     return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: state.result!.restaurants.length,
-                        itemBuilder: (context, index) {
-                          var restaurant = state.result!.restaurants[index];
-                          return RestaurantSearchCard(restaurant: restaurant);
-                        });
-                  } else if (state.state == ResultState.noData) {
+                      shrinkWrap: true,
+                      itemCount: state.result!.restaurants.length,
+                      itemBuilder: (context, index) {
+                        var restaurant = state.result!.restaurants[index];
+                        return RestaurantCard(restaurant: restaurant);
+                      }
+                    );
+                  } else if (state.state == ResultState.NoData) {
                     return Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
                         children: const [
-                          Icon(
-                            Icons.search_off,
-                            color: Colors.grey,
-                            size: 60),
+                          Icon(Icons.search_off, color: Colors.grey, size: 64),
                           SizedBox(height: 24),
-                          Text('Your search was not found.',
-                            style: TextStyle(
-                              color: Colors.grey
-                            ),
-                          ),
+                          Text('No restaurant found. Please recheck your keyword',
+                              style: TextStyle(color: Colors.grey))
                         ],
-                      ),
+                      )
                     );
-                  } else if (state.state == ResultState.noData) {
+                  } else if (state.state == ResultState.NoConnection) {
                     return Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
-                          Center(
-                            child: Text(state.message),
-                          )
+                          Text(state.message),
+                          const SizedBox(height: 8),
                         ],
                       ),
                     );
-                  } else if (state.state == ResultState.noConnection) {
+                  } else if (state.state == ResultState.Error) {
                     return Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Text(state.message),
-                          )
-                        ],
-                      ),
-                    );
-                  } else if (state.state == ResultState.error) {
-                    return Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Center(
-                            child: Text(state.message),
-                          )
+                          Text(state.message),
+                          const SizedBox(height: 8),
                         ],
                       ),
                     );
                   } else {
-                    return const Center(child: Text('Find Something'));
+                    return const Center(child: Text(''));
                   }
-                }),
-            ),
-          ],
+                }
+              ),
+            )
+          ]
         ),
-      ),
+      )
     );
   }
 
   Widget searchField(){
-    return Consumer<SearchProvider>(
+    return Consumer<SearchRestaurantProvider>(
       builder: (context, state, _) {
         return Column(
           children: <Widget>[
@@ -156,7 +144,3 @@ class _SearchRestaurantState extends State<SearchRestaurant> {
     );
   }
 }
-
-
-
-

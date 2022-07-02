@@ -1,58 +1,57 @@
-import 'dart:io';
-import 'package:flutter_restaurant_api/data/api/api_service.dart';
-import 'package:flutter_restaurant_api/data/model/restaurant_search.dart';
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/foundation.dart';
+import 'dart:io';
 
-enum ResultState {
-  loading,
-  noData,
-  hasData,
-  error,
-  noConnection
-}
+import 'package:flutter_restaurant_api/data/api/api_service.dart';
+import 'package:flutter_restaurant_api/data/model/restaurant.dart';
 
-class SearchProvider extends ChangeNotifier {
+
+enum ResultState { Loading, NoData, HasData, Error, NoConnection }
+
+class SearchRestaurantProvider extends ChangeNotifier {
   final ApiService apiService;
-  SearchProvider({
-    required this.apiService
-  }) {
+  // final String query;
+
+  SearchRestaurantProvider({required this.apiService}) {
     fetchQueryRestaurant(query);
   }
 
-  RestaurantSearch? _restaurantSearch;
+  RestaurantSearch? _restaurantList;
   ResultState? _state;
   String _message = '';
   String _query = '';
+
   String get message => _message;
   String get query => _query;
-  RestaurantSearch? get result => _restaurantSearch;
+  RestaurantSearch? get result => _restaurantList;
   ResultState? get state => _state;
 
   Future<dynamic> fetchQueryRestaurant(String query) async {
     try {
       if (query.isNotEmpty) {
-        _state = ResultState.loading;
+        _state = ResultState.Loading;
         _query = query;
         notifyListeners();
-        final restaurantList = await apiService.restaurantSearch(query);
+        final restaurantList = await apiService.searchRestaurant(query);
         if (restaurantList.restaurants.isEmpty) {
-          _state = ResultState.noData;
+          _state = ResultState.NoData;
           notifyListeners();
-          return _message = 'Data Kosong';
+          return _message = 'Empty Data';
         } else {
-          _state = ResultState.hasData;
+          _state = ResultState.HasData;
           notifyListeners();
-          return _restaurantSearch = restaurantList;
+          return _restaurantList = restaurantList;
         }
       }
     } on SocketException {
-      _state = ResultState.noConnection;
+      _state = ResultState.NoConnection;
       notifyListeners();
-      return _message = 'Periksa Kembali Koneksi Anda';
+      return _message = 'Please check your connection.';
     } catch (e) {
-      _state = ResultState.error;
+      _state = ResultState.Error;
       notifyListeners();
-      return _message = 'Error: $e';
+      return _message = 'Error --> $e';
     }
   }
 }
